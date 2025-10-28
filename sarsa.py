@@ -27,7 +27,7 @@ actionDim = cartPoleEnv.action_space.n
 qNetwork = QNetwork(stateDim, actionDim)
 
 # Parameters
-ALPHA = 0.001
+ALPHA = 0.005
 EPSILON = 1.0
 EPSILONDECAY = 1.005
 GAMMA = 0.99
@@ -38,6 +38,7 @@ def policy(state, explore=0.0):
     with torch.no_grad():
         qValues = qNetwork(state)
         action = torch.argmax(qValues[0]).item()
+        # print(f"Q-Value: {qValues} | Action: {action}") # For Visualization purpose.
     if torch.rand(1).item() <= explore:
         action = torch.randint(0, actionDim, (1,)).item()
     return action
@@ -45,12 +46,11 @@ def policy(state, explore=0.0):
 
 for episode in range(NUMEPISODES):
     state, _ = cartPoleEnv.reset()
-    state = torch.tensor(state, dtype=torch.float32).unsqueeze(0)
+    state = torch.tensor(state, dtype=torch.float32).unsqueeze(0) # Convert S to a PyTorch tensor.
     done = False
     totalReward = 0
     episodeLength = 0
-
-    action = policy(state, EPSILON)
+    action = policy(state, EPSILON) # Choosing first action based on state.
 
     while not done:
         nextState, reward, terminated, truncated, _ = cartPoleEnv.step(action)
@@ -72,7 +72,7 @@ for episode in range(NUMEPISODES):
         loss.backward()
         with torch.no_grad():
             for param in qNetwork.parameters():
-                param += ALPHA * param.grad  # gradient ascent on Q (since delta = target - current)
+                param -= ALPHA * param.grad  # gradient ascent on Q (since delta = target - current)
 
         state = nextState
         action = nextAction
