@@ -78,8 +78,8 @@ for episode in range(NUMEPISODES):
         # 4. Compute the Sarsa Target value: R + gamma * Q(S', A')
         with torch.no_grad():
             # Get the Q-value of the *next* state and *next* action
-            next_q = qNetwork(nextState)[0][nextAction]
-            target = reward + (0 if done else GAMMA * next_q)
+            nextQ = qNetwork(nextState)[0][nextAction]
+            target = reward + (0 if done else GAMMA * nextQ)
 
         # 5. Compute prediction and loss
         # Prediction is the Q-value for the *current* state (S) and action (A)
