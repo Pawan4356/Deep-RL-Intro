@@ -27,8 +27,8 @@ state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n
 
 q_net = QNetwork(state_dim, action_dim)
-q_net.load_state_dict(torch.load("SarsaQNet.pt", map_location=torch.device("cpu")))
-# q_net.load_state_dict(torch.load("QLearningQNet.pt", map_location=torch.device("cpu")))
+# q_net.load_state_dict(torch.load("SarsaQNet.pt", map_location=torch.device("cpu")))
+q_net.load_state_dict(torch.load("QLearningQNet.pt", map_location=torch.device("cpu")))
 q_net.eval()
 
 # Policy Function 
