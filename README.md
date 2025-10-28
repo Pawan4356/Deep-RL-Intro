@@ -56,9 +56,7 @@ Two key forms:
 ### **1. SARSA (On-Policy)**
 
 Learns from actions **actually taken** following the current policy:
-$
-Q(s, a) \leftarrow Q(s, a) + \alpha \cdot [r + \gamma Q(s', a') - Q(s, a)]
-$
+$Q(s, a) \leftarrow Q(s, a) + \alpha \cdot (r + \gamma Q(s', a')) - Q(s, a)$
 
 File: `sarsa.py`
 
