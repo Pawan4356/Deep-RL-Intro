@@ -52,12 +52,10 @@ def policy(state, explore=0.0):
         qValues = qNetwork(state)
         # Choose the best action (exploit)
         action = torch.argmax(qValues[0]).item()
-        
     # Check for exploration
     if torch.rand(1).item() <= explore:
         # Choose a random action (explore)
         action = torch.randint(0, actionDim, (1,)).item()
-    
     return action
 
 
@@ -81,10 +79,10 @@ for episode in range(NUMEPISODES):
         with torch.no_grad():
             # Find the max Q-value for the next state (S')
             # This is the "max_a' Q(S', a')" part
-            max_next_q = torch.max(qNetwork(nextState)[0])
+            maxNextQ = torch.max(qNetwork(nextState)[0])
             
             # The target is R + gamma * max_Q(S', a')
-            target = reward + (0 if done else GAMMA * max_next_q)
+            target = reward + (0 if done else GAMMA * maxNextQ)
 
         # 4. Compute prediction and loss
         # Prediction is the Q-value for the original state (S) and action (A)
@@ -92,7 +90,7 @@ for episode in range(NUMEPISODES):
         currentQ = qValues[0][action]
         loss = (target - currentQ) ** 2 / 2
 
-        # 5. Manual gradient update (FIXED)
+        # 5. Manual gradient update
         qNetwork.zero_grad()
         loss.backward()
         with torch.no_grad():
