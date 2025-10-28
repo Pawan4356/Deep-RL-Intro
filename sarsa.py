@@ -2,7 +2,6 @@
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import gymnasium as gym
 
 # Environment
@@ -11,15 +10,17 @@ cartPoleEnv = gym.make("CartPole-v1", render_mode="rgb_array")
 # Q Network
 class QNetwork(nn.Module):
     def __init__(self, stateDim, actionDim):
-        super(QNetwork, self).__init__()
-        self.fc1 = nn.Linear(stateDim, 64)
-        self.fc2 = nn.Linear(64, 32)
-        self.output = nn.Linear(32, actionDim)
+        super().__init__()
+        self.model = nn.Sequential(
+            nn.Linear(stateDim, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, actionDim)
+        )
 
     def forward(self, x):
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        return self.output(x)
+        return self.model(x)
 
 stateDim = cartPoleEnv.observation_space.shape[0]
 actionDim = cartPoleEnv.action_space.n
