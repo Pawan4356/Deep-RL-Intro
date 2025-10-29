@@ -12,7 +12,7 @@ Q-Learning is an **off-policy** algorithm that learns from the **greedy** action
 
 ### CartPole Results
 
-![Demo](part4.gif)
+![CartPole Demo](part4.gif)
 
 ## References
 
